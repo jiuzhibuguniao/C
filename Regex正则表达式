@@ -1,0 +1,24 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<regex>
+
+int main()
+{
+	std::string pattern("[^c]ei");
+	pattern = "[[:alpha:]]*" + pattern + "[[:alpha:]]*";
+
+	std::regex r(pattern,std::regex::icase);
+	std::smatch results;
+	std::string test_str = "receipt freind theif receive";
+
+	for (std::sregex_iterator it(test_str.begin(), test_str.end(), r), end_it; it != end_it; ++it)
+	{
+		auto pos = it->prefix().length();
+		pos = pos > 40 ? pos - 40 : 0;
+		std::cout << it->prefix().str().substr(pos) << "\n\t\t>>>" << it->str() << "<<<\n"
+			<< it->suffix().str().substr(0, 40) << std::endl;
+	}
+
+	system("pause");
+}
