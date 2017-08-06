@@ -17,7 +17,7 @@ int main()
 	enum Tokens { INLINE = 128, VIRTUAL = 129 };
 
 	unsigned char uc = VIRTUAL;
-	newf(uc);
+	newf(uc);    //输出结果为空
 	newf(VIRTUAL);
 	system("pause");
 }
