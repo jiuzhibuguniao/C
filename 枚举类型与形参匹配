@@ -1,0 +1,23 @@
+#include<iostream>
+using namespace std;
+
+
+void newf(unsigned char s)
+{
+	cout << s << endl;
+}
+
+void newf(int a)
+{
+	cout << a << endl;
+}
+
+int main()
+{
+	enum Tokens { INLINE = 128, VIRTUAL = 129 };
+
+	unsigned char uc = VIRTUAL;
+	newf(uc);
+	newf(VIRTUAL);
+	system("pause");
+}
