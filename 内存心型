@@ -1,0 +1,61 @@
+#include<stdio.h>
+#include <Windows.h>
+#include <math.h>
+#define Maxnum 1800
+#define PI 3.1415926
+int Nownum;
+char *buff[Maxnum];
+
+void main()
+{
+	void SetToNum(int SetNum);//300M 每格子 共9个格子
+	Nownum = 0;
+	int ix; ix = 0;
+	DWORD startTime = 0;
+	double x = -1.11;
+	double y = 0;
+	startTime = GetTickCount(); //毫秒数
+
+	while (1)
+	{
+		if (((GetTickCount() - startTime) % 1000) <= 100) {
+			if (ix % 2 == 1) {
+				y = ((pow(abs((long)x), 2.0 / 3) + sqrt(pow(abs((long)x), 4.0 / 3) - 4 * (x*x - 1))) / 2);// x^(2)^(1/3)/2+sqrt(x^(4)^(1/3)-4*(x^2-1))/2;//y+
+			}
+			else {
+				y = ((pow(abs((long)x), 2.0 / 3) - sqrt(pow(abs((long)x), 4.0 / 3) - 4 * (x*x - 1))) / 2);// x^(2)^(1/3)/2-sqrt(x^(4)^(1/3)-4*(x^2-1))/2;//y-
+			}
+
+			auto SetNum = (int)Maxnum / 2 * (1 + y / 1.3);
+			SetToNum(SetNum);
+
+			x = x + 0.1; ix++;
+			if (x>1.11) { SetNum = 0; SetToNum(SetNum); x = -1.11; printf("Pauseing:10s\n"); Sleep(10000); }
+			printf("Nownum:%d(%f)\n", Nownum, x);
+		}
+	}
+
+
+
+}
+
+
+void SetToNum(int SetNum)
+{
+	if (SetNum>Maxnum) { printf("Error:SetNum>MaxNum!\n"); return; }
+	if (Nownum<SetNum)
+	{
+		for (Nownum++; Nownum <= SetNum; Nownum++)
+		{
+			buff[Nownum] = new char[1024 * 1024];
+		}
+		Nownum--;
+	}
+	else if (Nownum>SetNum)
+	{
+		for (; Nownum>SetNum; Nownum--)
+		{
+			delete buff[Nownum];
+		}
+	}
+}
