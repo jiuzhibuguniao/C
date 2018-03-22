@@ -1,0 +1,62 @@
+#include<iostream>
+#include<cmath>
+#include<fstream>
+#define PI 3.141592653
+double Num[30557][2];
+
+using namespace std; using std::fstream;
+
+double rad(double n)
+{
+	return n * PI / 180;
+}
+
+
+double distance(double longitude1, double latitude1, double longitude2, double latitude2)
+{
+	double Lat1 = rad(latitude1);
+	double Lat2 = rad(latitude2);
+	double a = Lat1 - Lat2;
+	double b = rad(longitude1) - rad(longitude2);
+	double s = 2 * asin(sqrt(pow(sin(a / 2), 2) + cos(Lat1)*cos(Lat2)*pow(sin(b / 2), 2)));
+	s = s * 6378137;
+	return s;
+}
+
+
+int main()
+{
+	double longitude, latitude;
+	ifstream input;
+	ofstream output;
+	output.open("C:\\Users\\Rooobins\\Desktop\\Totalt.txt", fstream::app);
+	input.open("C:\\users\\Rooobins\\Desktop\\DataXXYY.txt", fstream::in);
+	if (!input.is_open())
+	{
+		cout << "Open file failure" << endl;
+	}
+		
+		
+		
+	for (int i = 0; i != 30557; i++)
+	{
+		input >> longitude >> latitude;
+		Num[i][0] = longitude;
+		Num[i][1] = latitude;
+	}
+		
+	input.close();
+	if (!output.is_open())
+	{
+		cout << "Open file failure" << endl;
+	}
+
+	for (int i = 0; i != 30557; i++)
+	{
+		for (int j = i + 1; j != 30557; j++)
+		{
+				output << Num[i][0] << "  " << Num[i][1] << "  " << Num[j][0] << "  " << Num[j][1] << "  " << distance(Num[i][0], Num[i][1], Num[j][0], Num[j][1]) << endl;
+		}
+	}
+	return 0;
+}
