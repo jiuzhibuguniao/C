@@ -1,0 +1,90 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<iomanip>
+#include<ctime>
+#include<fstream>
+#define PI 3.141592653
+
+using namespace std; using std::vector; using std::string; using std::fstream;
+
+//度数转化为弧度函数
+double rad(double n)
+{
+	return n * PI / 180;
+}
+
+//取a-b之间范围的随机数函数
+int random(int a, int b)
+{
+	int dis = b - a;
+	return rand() % dis + a;
+}
+
+//计算两个经纬度之间的距离
+double distance(double longitude1, double latitude1, double longitude2, double latitude2)
+{
+	double Lat1 = rad(latitude1);
+	double Lat2 = rad(latitude2);
+	double a = Lat1 - Lat2;
+	double b = rad(longitude1) - rad(longitude2);
+	double s = 2 * asin(sqrt(pow(sin(a / 2), 2) + cos(Lat1)*cos(Lat2)*pow(sin(b / 2), 2)));
+	s = s * 6378137;
+	return s;
+}
+
+
+
+
+int main()
+{
+	ifstream input;
+	
+	vector<vector<double>> ivec;
+	double N1, N2;
+	
+	vector<vector<vector<double>>> END{ 50000 };
+	int cnt = 0;
+
+
+	input.open("C:\\Users\\Rooobins\\Desktop\\DataXXYY.txt", fstream::in);
+
+	if (!input.is_open())
+	{
+		cout << "Open file failure." << endl;
+	}
+
+	for (int i = 0; i != 30557; ++i)
+	{
+		vector<double> N;
+		input >> N1 >> N2;
+		N.push_back(N1);
+		N.push_back(N2);
+		ivec.push_back(N);
+		N.clear();
+	}
+
+	while (ivec.size() != 5)
+	{
+		
+		double DIS;
+		size_t M = random(0, ivec.size()-1);
+		for (auto q = ivec.begin(); q != ivec.end(); q++)
+		{
+			DIS = distance((*q)[0], (*q)[1], ivec[M][0], ivec[M][1]);
+			if (abs(DIS) <= 3000)
+			{
+				END[cnt].push_back(*q);
+			}
+			else if (abs(DIS) <= 2500)
+			{
+				q = ivec.erase(q);
+			}
+		}
+		++cnt;
+	}
+	
+	cout << END.size() << endl;
+	
+	system("pause");
+}
